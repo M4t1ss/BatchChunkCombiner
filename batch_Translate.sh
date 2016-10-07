@@ -34,22 +34,39 @@ fi;
 
 mkdir $DATA_DIR/batch;
 
-FILES=$FILE_PATH/*
-for f in $FILES
-do
-  if [[ $f == *$FILE_TEMPLATE* ]] ; then
-  
-	echo $f >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
-  
-	#translate the test data
-	php ./$PHP_FILE CharRNN $f $CORPUS $DATA_DIR
-	
-	#remove path from model file name
-	modelFile=$(basename "$f")
-	
-	#score the translation
-	./multi-bleu.perl $DATA_DIR/$CORPUS/$TEST_FILE < $DATA_DIR/batch/$CORPUS.hyb.CharRNN${modelFile}.${SYSTEMS}.txt | cut -c 1-12 >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
-  
-	echo "" >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
-  fi
-done
+if [ "$LM_TYPE" == "CharRNN" ] ; then
+	FILES=$FILE_PATH/*
+	for f in $FILES
+	do
+	  if [[ $f == *$FILE_TEMPLATE* ]] ; then
+	  
+		echo $f >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
+	  
+		#translate the test data
+		php ./$PHP_FILE $LM_TYPE $f $CORPUS $DATA_DIR
+		
+		#remove path from model file name
+		modelFile=$(basename "$f")
+		
+		#score the translation
+		./multi-bleu.perl $DATA_DIR/$CORPUS/$TEST_FILE < $DATA_DIR/batch/$CORPUS.hyb.${LM_TYPE}${modelFile}.${SYSTEMS}.txt | cut -c 1-12 >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
+	  
+		echo "" >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
+	  fi;
+	done;
+else
+	if [ "$LM_TYPE" == "Ken" || "$LM_TYPE" == "RWTH" ] ; then
+		echo $f >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
+	  
+		#translate the test data
+		php ./$PHP_FILE $LM_TYPE $f $CORPUS $DATA_DIR
+		
+		#remove path from model file name
+		modelFile=$(basename "$f")
+		
+		#score the translation
+		./multi-bleu.perl $DATA_DIR/$CORPUS/$TEST_FILE < $DATA_DIR/batch/$CORPUS.hyb.${LM_TYPE}${modelFile}.${SYSTEMS}.txt | cut -c 1-12 >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
+	  
+		echo "" >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
+	fi;
+fi;
