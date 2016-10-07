@@ -3,7 +3,8 @@ FILE_PATH=$1;		#Path to the language models - /mnt/matiss/torch/char-rnn/cv/500k
 FILE_TEMPLATE=$2;	#First characters of the language model names - lm_lstm
 CORPUS=$3;			#legal or general
 SYSTEMS=$4;			#bg, hy or bghy
-DATA_DIR=$5;		#/mnt/matiss/EXP_2016_10/data
+
+source ./configuration.cfg;
 
 if [ "$CORPUS" == "legal" ] ; then
 	TEST_FILE="test_short.lv";
@@ -43,8 +44,7 @@ do
 	php ./$PHP_FILE CharRNN $f $CORPUS $DATA_DIR
 	
 	#remove path from model file name
-	# modelFile=$(echo $f | sed -e "s/\/data\/matiss\/Models\/CharRNN\///g")
-	modelFile=$(echo $f | sed -e "s/\/mnt\/matiss\/torch\/char-rnn\/cv\/500k\///g")
+	modelFile=$(basename "$f")
 	
 	#score the translation
 	./multi-bleu.perl $DATA_DIR/$CORPUS/$TEST_FILE < $DATA_DIR/batch/$CORPUS.hyb.CharRNN${modelFile}.${SYSTEMS}.txt | cut -c 1-12 >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
