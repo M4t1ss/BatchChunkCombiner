@@ -1,6 +1,7 @@
+
 T1="test";
 T2=".txt";
-TEMPFILE=$T1$RANDOM$T2;
+TEMPFILE=${T1}${RANDOM}${T2};
 MODELFILE=$1;
 DATA="$2";
 TORCH_DIR=$3;

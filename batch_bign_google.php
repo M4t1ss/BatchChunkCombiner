@@ -1,15 +1,10 @@
 <?php
-// if(!isset($argv[1]) || $argv[1]==""){
-	// echo "Please provide the language model!\n";
-// }
 
 $languageModel 	= $argv[1]; //Ken, RWTH or CharRNN
 $modelFile	 	= $argv[2]; //lm_10243layer1M_epoch1.00_0.7602.t7_cpu.t7 or similar...
 $corpus 		= $argv[3]; //legal or general
 $DATA_DIR 		= $argv[4]; ///mnt/matiss/EXP_2016_10/data
-// $model = str_replace("/data/matiss/Models/CharRNN/","",$modelFile);
-$model = str_replace("/mnt/matiss/torch/char-rnn/cv/500k/","",$modelFile);
-$model = str_replace(".txt","",$model);
+$model = basename($modelFile);
 
 
 if($corpus == "legal"){

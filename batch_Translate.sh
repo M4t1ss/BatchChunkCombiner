@@ -3,6 +3,7 @@ FILE_PATH=$1;		#Path to the language models - /mnt/matiss/torch/char-rnn/cv/500k
 FILE_TEMPLATE=$2;	#First characters of the language model names - lm_lstm
 CORPUS=$3;			#legal or general
 SYSTEMS=$4;			#bg, hy or bghy
+LM_TYPE=$5;			#Ken, RWTH or CharRNN
 
 source ./configuration.cfg;
 
