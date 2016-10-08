@@ -1,1 +1,1 @@
-# NeuralBatchChunkCombiner
+# BatchChunkCombiner
