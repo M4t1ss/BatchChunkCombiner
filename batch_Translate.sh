@@ -33,6 +33,7 @@ else
 fi;
 
 mkdir $DATA_DIR/batch;
+mkdir ./test;
 
 if [ "$LM_TYPE" == "CharRNN" ] ; then
 	FILES=$FILE_PATH/*
