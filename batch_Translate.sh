@@ -44,7 +44,7 @@ if [ "$LM_TYPE" == "CharRNN" ] ; then
 		echo $f >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
 	  
 		#translate the test data
-		php ./$PHP_FILE $LM_TYPE $f $CORPUS $DATA_DIR
+		php ./$PHP_FILE $LM_TYPE $f $CORPUS $DATA_DIR $TORCH_DIR
 		
 		#remove path from model file name
 		modelFile=$(basename "$f")
@@ -60,7 +60,7 @@ else
 		echo $f >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
 	  
 		#translate the test data
-		php ./$PHP_FILE $LM_TYPE $f $CORPUS $DATA_DIR
+		php ./$PHP_FILE $LM_TYPE $f $CORPUS $DATA_DIR $TORCH_DIR
 		
 		#remove path from model file name
 		modelFile=$(basename "$f")
