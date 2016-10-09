@@ -15,7 +15,7 @@ else
 	fi;
 fi;
 
-echo "Using the $CORPUS domain test file - $DATA_DIR/data/$CORPUS/$TEST_FILE";
+echo "Using the $CORPUS domain test file - $DATA_DIR/$CORPUS/$TEST_FILE";
 
 if [ "$SYSTEMS" == "bg" ] ; then
 	PHP_FILE="batch_bign_google.php";
@@ -37,17 +37,17 @@ mkdir ./test;
 
 if [ "$LM_TYPE" == "CharRNN" ] ; then
 	FILES=$FILE_PATH/*
-	for f in $FILES
+	for languageModelFile in $FILES
 	do
-	  if [[ $f == *$FILE_TEMPLATE* ]] ; then
+	  if [[ $languageModelFile == *$FILE_TEMPLATE* ]] ; then
 	  
-		echo $f >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
+		echo $languageModelFile >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
 	  
 		#translate the test data
-		php ./$PHP_FILE $LM_TYPE $f $CORPUS $DATA_DIR $TORCH_DIR
+		php ./$PHP_FILE $LM_TYPE $languageModelFile $CORPUS $DATA_DIR $TORCH_DIR
 		
 		#remove path from model file name
-		modelFile=$(basename "$f")
+		modelFile=$(basename "$languageModelFile")
 		
 		#score the translation
 		./multi-bleu.perl $DATA_DIR/$CORPUS/$TEST_FILE < $DATA_DIR/batch/$CORPUS.hyb.${LM_TYPE}${modelFile}.${SYSTEMS}.txt | cut -c 1-12 >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
@@ -56,17 +56,15 @@ if [ "$LM_TYPE" == "CharRNN" ] ; then
 	  fi;
 	done;
 else
-	if [ "$LM_TYPE" == "Ken" || "$LM_TYPE" == "RWTH" ] ; then
-		echo $f >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
+	if [ "$LM_TYPE" == "Ken" ] || [ "$LM_TYPE" == "RWTH" ] ; then
+		languageModelFile=$FILE_PATH/$FILE_TEMPLATE;
+		echo $languageModelFile >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
 	  
 		#translate the test data
-		php ./$PHP_FILE $LM_TYPE $f $CORPUS $DATA_DIR $RWTHLM_DIR
-		
-		#remove path from model file name
-		modelFile=$(basename "$f")
+		php ./$PHP_FILE $LM_TYPE $languageModelFile $CORPUS $DATA_DIR $RWTHLM_DIR
 		
 		#score the translation
-		./multi-bleu.perl $DATA_DIR/$CORPUS/$TEST_FILE < $DATA_DIR/batch/$CORPUS.hyb.${LM_TYPE}${modelFile}.${SYSTEMS}.txt | cut -c 1-12 >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
+		./multi-bleu.perl $DATA_DIR/$CORPUS/$TEST_FILE < $DATA_DIR/batch/$CORPUS.hyb.${LM_TYPE}${FILE_TEMPLATE}.${SYSTEMS}.txt | cut -c 1-12 >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
 	  
 		echo "" >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
 	fi;
