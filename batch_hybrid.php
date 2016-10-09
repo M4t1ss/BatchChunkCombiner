@@ -4,7 +4,7 @@ $languageModel 	= $argv[1]; //Ken, RWTH or CharRNN
 $modelFile	 	= $argv[2]; //lm_10243layer1M_epoch1.00_0.7602.t7_cpu.t7 or similar...
 $corpus 		= $argv[3]; //legal or general
 $DATA_DIR 		= $argv[4]; ///mnt/matiss/EXP_2016_10/data
-$TORCH_DIR 		= $argv[5]; ///home/matiss/torch/install/bin
+$LM_TOOL_DIR	= $argv[5]; //Directory for Torch /home/matiss/torch/install/bin or RWTHLM
 $model = basename($modelFile);
 
 
@@ -75,16 +75,16 @@ if ($ing && $inb) {
 						$perplexities[] = trim(shell_exec('./getKen_PPL.sh "'.$testPPLfour.'"'));
 						break;
 					case 'RWTH':
-						$perplexities[] = trim(shell_exec('./getNN_PPL.sh "'.$testPPLone.'"'));
-						$perplexities[] = trim(shell_exec('./getNN_PPL.sh "'.$testPPLtwo.'"'));
-						$perplexities[] = trim(shell_exec('./getNN_PPL.sh "'.$testPPLthree.'"'));
-						$perplexities[] = trim(shell_exec('./getNN_PPL.sh "'.$testPPLfour.'"'));
+						$perplexities[] = trim(shell_exec('./getNN_PPL.sh "'.$testPPLone.'" '.$LM_TOOL_DIR)));
+						$perplexities[] = trim(shell_exec('./getNN_PPL.sh "'.$testPPLtwo.'" '.$LM_TOOL_DIR)));
+						$perplexities[] = trim(shell_exec('./getNN_PPL.sh "'.$testPPLthree.'" '.$LM_TOOL_DIR)));
+						$perplexities[] = trim(shell_exec('./getNN_PPL.sh "'.$testPPLfour.'" '.$LM_TOOL_DIR)));
 						break;
 					case 'CharRNN':
-						$perplexities[] = str_replace("Perplexity per word:","",trim(shell_exec('./getChar_PPL_batch.sh '.$modelFile.' "'.$testPPLone.'" '.$TORCH_DIR)));
-						$perplexities[] = str_replace("Perplexity per word:","",trim(shell_exec('./getChar_PPL_batch.sh '.$modelFile.' "'.$testPPLtwo.'" '.$TORCH_DIR)));
-						$perplexities[] = str_replace("Perplexity per word:","",trim(shell_exec('./getChar_PPL_batch.sh '.$modelFile.' "'.$testPPLthree.'" '.$TORCH_DIR)));
-						$perplexities[] = str_replace("Perplexity per word:","",trim(shell_exec('./getChar_PPL_batch.sh '.$modelFile.' "'.$testPPLfour.'" '.$TORCH_DIR)));
+						$perplexities[] = str_replace("Perplexity per word:","",trim(shell_exec('./getChar_PPL_batch.sh '.$modelFile.' "'.$testPPLone.'" '.$LM_TOOL_DIR)));
+						$perplexities[] = str_replace("Perplexity per word:","",trim(shell_exec('./getChar_PPL_batch.sh '.$modelFile.' "'.$testPPLtwo.'" '.$LM_TOOL_DIR)));
+						$perplexities[] = str_replace("Perplexity per word:","",trim(shell_exec('./getChar_PPL_batch.sh '.$modelFile.' "'.$testPPLthree.'" '.$LM_TOOL_DIR)));
+						$perplexities[] = str_replace("Perplexity per word:","",trim(shell_exec('./getChar_PPL_batch.sh '.$modelFile.' "'.$testPPLfour.'" '.$LM_TOOL_DIR)));
 						break;
 				}
 

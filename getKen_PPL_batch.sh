@@ -1,4 +1,3 @@
-
 MODELFILE=$1;
 DATA="$2";
 

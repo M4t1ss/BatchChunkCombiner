@@ -1,4 +1,3 @@
-
 T1="test";
 T2=".txt";
 TEMPFILE=${T1}${RANDOM}${T2};
