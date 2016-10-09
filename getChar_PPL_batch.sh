@@ -12,4 +12,4 @@ $TORCH_DIR/th ./measure_perplexity.lua $MODELFILE \
 	-data_path ./test/$TEMPFILE \
 	-verbose 0 | grep "Perplexity per word:"
 	
-rm .n/test/$TEMPFILE;
+rm ./test/$TEMPFILE;
