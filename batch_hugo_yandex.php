@@ -5,6 +5,7 @@ $modelFile	 	= $argv[2]; //lm_10243layer1M_epoch1.00_0.7602.t7_cpu.t7 or similar
 $corpus 		= $argv[3]; //legal or general
 $DATA_DIR 		= $argv[4]; ///mnt/matiss/EXP_2016_10/data
 $LM_TOOL_DIR	= $argv[5]; //Directory for Torch /home/matiss/torch/install/bin or RWTHLM
+$VOCAB			= $argv[6]; ///home/matiss/data/DGT_1m/DGTlv.500.1m.sorted.txt
 $model = basename($modelFile);
 
 
@@ -42,15 +43,15 @@ if ($ing && $inb) {
 				//Get the perplexities of the translations
 				$testPPLone = str_replace(array('`', '"', PHP_EOL), '', htmlspecialchars_decode(html_entity_decode($sentenceOne), ENT_QUOTES));
 				$testPPLtwo = str_replace(array('`', '"', PHP_EOL), '', htmlspecialchars_decode(html_entity_decode($sentenceTwo), ENT_QUOTES));
-				// var_dump($testPPLone);
+
 				switch($languageModel){
 					case 'Ken':
-						$perplexities[] = str_replace("Perplexity excluding OOVs:	","",trim(shell_exec('./getKen_PPL.sh "'.$testPPLone.'"')));
-						$perplexities[] = str_replace("Perplexity excluding OOVs:	","",trim(shell_exec('./getKen_PPL.sh "'.$testPPLtwo.'"')));
+						$perplexities[] = str_replace("Perplexity excluding OOVs:	","",trim(shell_exec('./getKen_PPL.sh '.$modelFile.' "'.$testPPLone.'"')));
+						$perplexities[] = str_replace("Perplexity excluding OOVs:	","",trim(shell_exec('./getKen_PPL.sh '.$modelFile.' "'.$testPPLtwo.'"')));
 						break;
 					case 'RWTH':
-						$perplexities[] = trim(shell_exec('./getNN_PPL.sh "'.$testPPLone.'" '.$LM_TOOL_DIR));
-						$perplexities[] = trim(shell_exec('./getNN_PPL.sh "'.$testPPLtwo.'" '.$LM_TOOL_DIR));
+						$perplexities[] = trim(shell_exec('./getNN_PPL.sh '.$modelFile.' "'.$testPPLone.'" '.$VOCAB.' '.$LM_TOOL_DIR));
+						$perplexities[] = trim(shell_exec('./getNN_PPL.sh '.$modelFile.' "'.$testPPLtwo.'" '.$VOCAB.' '.$LM_TOOL_DIR));
 						break;
 					case 'CharRNN':
 						$perplexities[] = str_replace("Perplexity per word:","",trim(shell_exec('./getChar_PPL.sh '.$modelFile.' "'.$testPPLone.'" '.$LM_TOOL_DIR)));

@@ -1,9 +1,10 @@
 
-FILE_PATH=$1;		#Path to the language models - /mnt/matiss/torch/char-rnn/cv/500k
-FILE_TEMPLATE=$2;	#First characters of the language model names - lm_lstm
-CORPUS=$3;			#legal or general
-SYSTEMS=$4;			#bg, hy or bghy
-LM_TYPE=$5;			#Ken, RWTH or CharRNN
+FILE_PATH=$1;		#Path to the language models for CharRNN - /mnt/matiss/torch/char-rnn/cv/500k. For KenLM or RWTHLM provide the directory of the model file.
+FILE_TEMPLATE=$2;	#First characters of the language model names for CharRNN - lm_lstm. For KenLM or RWTHLM provide the model file - DGT12.bin
+CORPUS=$3;			#Which data corpus to use - legal or general
+SYSTEMS=$4;			#Which chunks to combine - bg, hy or bghy
+LM_TYPE=$5;			#Which LM to use - Ken, RWTH or CharRNN
+VOCAB=$6;			#Vocabulary file. Only for RWTHLM
 
 source ./configuration.cfg;
 
@@ -61,7 +62,7 @@ else
 		echo $languageModelFile >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
 	  
 		#translate the test data
-		php ./$PHP_FILE $LM_TYPE $languageModelFile $CORPUS $DATA_DIR $RWTHLM_DIR
+		php ./$PHP_FILE $LM_TYPE $languageModelFile $CORPUS $DATA_DIR $RWTHLM_DIR $VOCAB
 		
 		#score the translation
 		./multi-bleu.perl $DATA_DIR/$CORPUS/$TEST_FILE < $DATA_DIR/batch/$CORPUS.hyb.${LM_TYPE}${FILE_TEMPLATE}.${SYSTEMS}.txt | cut -c 1-12 >> BLEU_${CORPUS}_${FILE_TEMPLATE}_${SYSTEMS}.txt
